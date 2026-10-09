@@ -15,6 +15,7 @@ const syncUserCreation=inngest.createFunction(
     },
     async ({event})=>{
         const {id,first_name,last_name,email_addresses,image_url}=event.data
+        console.log(event.data)
         let username=email_addresses[0].email_address.split('@')[0]
         const user=await User.findOne({username});
         if(user){
@@ -23,7 +24,7 @@ const syncUserCreation=inngest.createFunction(
         const userData={
             _id:id,
             email:email_addresses[0].email_address,
-            first_name:first_name+" " + last_name,
+            full_name:first_name+" " + last_name,
             profile_picture:image_url,
             username
         }
