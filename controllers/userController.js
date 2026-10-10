@@ -110,7 +110,7 @@ export const followUser=async(req,res)=>{
         await user.save();
         const toUser=await User.findById(id)
         toUser.followers.push(userId)
-        
+        await toUser.save();
         res.json({success:true,message:"Now you are following this user"})
     } catch (error) {
         console.log(error)
