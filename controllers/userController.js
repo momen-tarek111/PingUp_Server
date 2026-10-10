@@ -22,9 +22,7 @@ export const updateUserData=async(req,res)=>{
         const {userId}=req.auth();
         let {username,bio,location,full_name}=req.body;
         const tempUser=await User.findById(userId);
-        
         !username&&(username=tempUser.username)
-
         if(tempUser.username!==username){
             const user=await User.findOne({username})
             if(user){
@@ -40,38 +38,38 @@ export const updateUserData=async(req,res)=>{
         const profile=req.files.profile&&req.files.profile[0]
         const cover=req.files.cover&& req.files.cover[0]
         if(profile){
-            const buffer=fs.readFileSync(profile.path)
+            const fileBuffer=fs.readFileSync(profile.path)
+            const fileBase64=fileBuffer.toString("base64")
             const response=await imageKit.files.upload({
-                file:buffer,
+                file:fileBase64,
                 fileName:profile.originalname,
                 folder:"profiles"
             })
-            const url=imageKit.helper.buildSrc({
-                src:response.filePath,
-                transformation:[
-                    {quality:'auto'},
-                    {format:'webp'},
-                    {width:'512'}
+            updateData.profile_picture=response.url || imageKit.helper.buildSrc({
+                src: response.filePath,
+                transformation: [
+                    { quality: 'auto' },
+                    { format: 'webp' },
+                    { width: '512' }
                 ]
-            })
-            updateData.profile_picture=url
+            });
         }
         if(cover){
-            const buffer=fs.readFileSync(cover.path)
+            const fileBuffer = fs.readFileSync(cover.path);
+            const fileBase64 = fileBuffer.toString("base64");
             const response=await imageKit.files.upload({
-                file:buffer,
+                file:fileBase64,
                 fileName:cover.originalname,
                 folder:"covers"
             })
-            const url=imageKit.helper.buildSrc({
-                src:response.filePath,
-                transformation:[
-                    {quality:'auto'},
-                    {format:'webp'},
-                    {width:'1280'}
+            updateData.cover_photo = response.url || imageKit.helper.buildSrc({
+                src: response.filePath,
+                transformation: [
+                    { quality: 'auto' },
+                    { format: 'webp' },
+                    { width: '1280' }
                 ]
-            })
-            updateData.cover_photo=url
+            });
         }
         const user=await User.findByIdAndUpdate(userId,updateData,{new:true})
         res.json({success:true,user,message:'Profile updated successfully'})
@@ -179,11 +177,9 @@ export const getUserConnections=async(req,res)=>{
     try {
         const {userId} = req.auth()
         const user = await User.findById(userId).populate('connections followers following')
-        console.log(userId)
-        console.log("userId")
-        const connections = user.connections
-        const followers = user.followers
-        const following = user.following
+        const connections = user?.connections
+        const followers = user?.followers
+        const following = user?.following
 
         const pendingConnections = (await Connection.find({to_user_id: userId, status: 'pending'}).populate('from_user_id')).map(connection=>connection.from_user_id)
 
@@ -227,6 +223,9 @@ export const acceptConnectionRequest=async(req,res)=>{
 export const getUserProfiles=async(req,res)=>{
     try {
         const {profileId} =req.body;
+        if (!profileId) {
+            return res.json({ success: false, message: "Profile ID is missing" });
+        }
         const profile=await User.findById(profileId)
         if(!profile){
             return res.json({success:false,message:"Profile not found"})

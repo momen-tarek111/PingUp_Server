@@ -7,25 +7,28 @@ export const addPost=async(req,res)=>{
         const {userId}=req.auth()
         const {content,post_type}=req.body
         const images=req.files
+        // console.log(images)
         let image_urls=[]
         if(images.length){
             image_urls=await Promise.all(
-                image_urls.map(async(image)=>{
+                images.map(async(image)=>{
+                    console.log(image)
                     const fileBuffer=fs.readFileSync(image.path)
+                    const fileBase64=fileBuffer.toString("base64")
                     const response=await imageKit.files.upload({
-                        file:fileBuffer,
+                        file:fileBase64,
                         fileName:image.originalname,
                         folder:"posts"
                     })
-                    const url=imageKit.helper.buildSrc({
-                        src:response.filePath,
-                        transformation:[
-                            {quality:'auto'},
-                            {format:'webp'},
-                            {width:'1280'}
-                        ]
-                    })
-                    return url
+                    const url=response.url || imageKit.helper.buildSrc({
+                                src: response.filePath,
+                                transformation: [
+                                    { quality: 'auto' },
+                                    { format: 'webp' },
+                                    { width: '1280' }
+                                ]
+                            });
+                    return url;
                 })
             )
         }
@@ -35,7 +38,7 @@ export const addPost=async(req,res)=>{
             image_urls,
             post_type
         })
-        res.json({success:true,user,message:'Post created successfully'})
+        res.json({success:true,message:'Post created successfully'})
     } catch (error) {
         console.log(error)
         res.json({success:false,message:error.message});
