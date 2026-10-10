@@ -21,7 +21,7 @@ const syncUserCreation=inngest.createFunction(
         if(user){
             username=username+Math.floor(Math.random()*10000)
         }
-        full_name=first_name;
+        let full_name=first_name;
         if(last_name){
             full_name=full_name+" "+last_name
         }
