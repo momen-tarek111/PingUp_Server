@@ -12,7 +12,7 @@
 ![ImageKit](https://img.shields.io/badge/ImageKit-0A66C2?style=for-the-badge)
 ![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-[🌐 Live App](https://ping-up-omega-five.vercel.app) • [🚀 Live API](https://ping-up-server-one-eta.vercel.app) • [🎬 Watch Demo](YOUR_GOOGLE_DRIVE_VIDEO_LINK) • [🖥️ Frontend Repo](https://github.com/momen-tarek111/PingUp.git)
+[🌐 Live App](https://ping-up-omega-five.vercel.app) • [🚀 Live API](https://ping-up-server-one-eta.vercel.app) • [🎬 Watch Demo](https://drive.google.com/file/d/148v4WUw6KSYpi-psPgUIgnhnkmSV12Ej/view?usp=sharing) • [🖥️ Frontend Repo](https://github.com/momen-tarek111/PingUp.git)
 
 </div>
 
@@ -20,7 +20,7 @@
 
 ## 🎬 Demo Video
 
-[![Watch the demo](https://img.shields.io/badge/▶_Watch_Full_Demo-Google_Drive-red?style=for-the-badge&logo=googledrive&logoColor=white)](YOUR_GOOGLE_DRIVE_VIDEO_LINK)
+[![Watch the demo](https://img.shields.io/badge/▶_Watch_Full_Demo-Google_Drive-red?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/148v4WUw6KSYpi-psPgUIgnhnkmSV12Ej/view?usp=sharing)
 
 ## 🔗 Live Links
 
