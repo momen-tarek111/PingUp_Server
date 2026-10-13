@@ -116,7 +116,7 @@ const sendNewConnectionRequestReminder=inngest.createFunction(
 const deleteStory=inngest.createFunction(
     {
         id:'story-delete',
-        triggers:[{event:'app/story.delete'}]
+        triggers:[{event:'app/story-delete'}]
     },
     async ({event,step})=>{
         const {storyId}=event.data;
