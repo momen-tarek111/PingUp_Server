@@ -27,20 +27,20 @@ export const sendMessage=async(req,res)=>{
         let media_url='';
         let message_type=image?'image':'text';
         if(message_type==='image'){
-            const buffer = fs.readFileSync(image.path);
+            const fileBuffer=fs.readFileSync(image.path)
+            const fileBase64=fileBuffer.toString("base64")
             const response = await imageKit.files.upload({
-                file: buffer,
+                file: fileBase64,
                 fileName: image.originalname,
                 folder: "messages",
             });
-            media_url=imageKit.helper.buildSrc({
-                src:response.filePath,
-                transformation:[
-                    {quality:'auto'},
-                    {format:'webp'},
-                    {width:'512'}
-                ]
-            })
+            media_url=response.url || imageKit.helper.buildSrc({
+                src: response.filePath,
+                transformation: [
+                    { quality: 'auto' },
+                    { format: 'webp' },
+                    { width: '1280' }
+                ]});
         }
         const message=await Message.create({
             from_user_id:userId,

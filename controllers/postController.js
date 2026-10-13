@@ -12,7 +12,6 @@ export const addPost=async(req,res)=>{
         if(images.length){
             image_urls=await Promise.all(
                 images.map(async(image)=>{
-                    console.log(image)
                     const fileBuffer=fs.readFileSync(image.path)
                     const fileBase64=fileBuffer.toString("base64")
                     const response=await imageKit.files.upload({
