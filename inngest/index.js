@@ -120,8 +120,7 @@ const deleteStory=inngest.createFunction(
     },
     async ({event,step})=>{
         const {storyId}=event.data;
-        const in24Hours=new Date(Date.now()+24*60*60*1000)
-        await step.sleepUntil('wait-for-24-hours',in24Hours)
+        await step.sleep('wait-for-24-hours', '24h');
         await step.run("delete-story",async()=>{
             await Story.findByIdAndDelete(storyId)
             return {message:"Story deleted."}
@@ -146,21 +145,23 @@ const sendNotificationOfUnseenMessages=inngest.createFunction(
 
             const body = `
             <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2>Hi ${user.full_name},</h2>
-            <p>You have ${unseenCount[userId]} unseen messages</p>
-            <p>Click <a href="${process.env.FRONTEND_URL}/messages" style="color: #10b981;
-            ">here</a> to view them</p>
-            <br/>
-            <p>Thanks,<br/>PingUp - Stay Connected</p>
-            </div>
-            `
+                <h2>Hi ${user.full_name},</h2>
+                <p>You have ${unseenCount[userId]} unseen messages</p>
+                <p>Click <a href="${process.env.FRONTEND_URL}/messages" style="color: #10b981;
+                ">here</a> to view them</p>
+                <br/>
+                <p>Thanks,<br/>PingUp - Stay Connected</p>
+                </div>
+                `
+            
+            // Moved inside the loop so each user gets their notification
+            await sendEmail({
+                to:user.email,
+                subject,
+                body
+            })
         }
-        await sendEmail({
-            to:user.email,
-            subject,
-            body
-        })
-        return {message:"Notification sent."}
+        return {message:"Notifications sent."}
     }
 )
 // Create an empty array where we'll export future Inngest functions
